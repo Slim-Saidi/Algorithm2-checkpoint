@@ -1,0 +1,88 @@
+ALGORITHM array-method
+VAR
+    tab1 : ARRAY_OF INTEGER[5];
+    tab2 : ARRAY_OF INTEGER[5];
+    i,j : INTEGER := 0
+    sum : INTEGER := 0
+    common : INTEGER := 0
+    verif : BOOLEAN := 0
+BEGIN
+    read(tab1)
+    read(tab2)
+    FOR i FROM 0 TO tab1.length -1 STEP 1  DO
+        FOR j FROM 0 TO tab2.length -1 STEP 1  DO
+            IF (tab1[i] = tab2[j]) THEN
+                verif = true
+            END_IF
+        END_FOR
+        IF (verif = false) THEN
+            sum = sum + tab1[i]
+        ELSE
+            common = common + tab1[i]
+        END_IF
+        verif := false
+    END_FOR
+
+    FOR j FROM 0 TO tab2.length -1 STEP 1  DO
+        FOR i FROM tab1.length -1 TO 1 STEP 1  DO
+            IF (tab2[j] = tab1[i]) THEN
+                verif = true
+            END_IF
+        END_FOR
+        IF (verif = false) THEN
+            sum = sum + tab2[j]
+        ELSE
+            common = common + tab1[i]
+        END_IF
+    END_FOR
+END
+
+
+
+ALGORITHM hash-table-method
+VAR
+    htbl : HASH_TABLE <INTEGER,INTEGER>
+    tab1,tab2 : ARRAY_OF INTEGER[]
+    i,j INTEGER := 0
+    sum,common : INTEGER := 0
+    verif : BOOLEAN := 0
+    ntab : ARRAY_OF INTEGER[]
+BEGIN
+
+    FOR i FROM 0 TO tab1.length -1 STEP 1  DO
+        FOR j FROM 0 TO tab2.length -1 STEP 1  DO
+            IF (tab1[i] = tab2[j]) THEN
+                verif = true
+            END_IF
+        END_FOR
+        IF (verif = false) THEN
+            htbl.insert(tab1[i], 1)
+        ELSE_IF (htbl.lookup(tab1[i])) THEN
+            htbl.insert(tab1[i], htbl.get(tab1[i] +1))
+        END_IF
+    END_FOR
+
+    FOR j FROM 0 TO tab2.length -1 STEP 1  DO
+        FOR i FROM 0 TO tab1.length -1 STEP 1  DO
+            IF (tab2[j] = tab1[i]) THEN
+                verif = true
+            END_IF
+        END_FOR
+        IF (verif = false) THEN
+            htbl.insert(tab2[j], 1)
+        ELSE_IF (htbl.lookup(tab2[j])) THEN
+            htbl.insert(tab2[j], htbl.get(tab2[j] +1))
+        END_IF
+    END_FOR
+    ntab := htbl.getkeys
+    FOR i FROM 0 TO ntab.length -1 DO
+        IF (htbl.get(ntab[i]) = 1) THEN
+            sum = sum + ntab[i]
+        ELSE
+            common = common + ntab[i]
+        END_IF
+    END_FOR
+    wrtie(sum)
+    write(common)
+
+END
